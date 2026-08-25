@@ -1,0 +1,16 @@
+Movie | Tamasha | Sad | Rainy
+Movie | Yeh Jawaani Hai Deewani | Happy | Sunny
+Poem | In the Rain by Julia | Romantic | Rainy
+Poem | If by Rudyard Kipling | Motivated | Cloudy
+Music | Channa Mereya | Sad | Cloudy
+Music | Ilahi | Happy | Sunny
+Quote | This too shall pass | Stressed | Rainy
+Quote | Keep Grinding | Motivated | Sunny
+Series | Fleabag | Sad | Cloudy
+Series | Ted Lasso | Happy | Sunny
+Movie | La La Land | Romantic | Cloudy
+Music | Perfect by Ed Sheeran | Romantic | Sunny
+Movie | Interstellar | Motivated | Cloudy
+Poem | The Road Not Taken | Motivated | Rainy
+Quote | Take a Deep Breath | Stressed | Cloudy
+Series | Friends | Happy | Cloudy
