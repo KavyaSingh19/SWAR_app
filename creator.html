@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swar — Kavya's Poetry Collection & Art Gallery</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts for Vintage Novel & Poetry Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Kalam:wght@300;400;700&family=Great+Vibes&family=Rozha+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="icon" type="image/png" href="/static/images/logo.png">
+
+    <style>
+        :root {
+            --paper-base: #fcf7ec;
+            --paper-highlight: #ffffff;
+            --paper-dark: #eee0c5;
+            --paper-edge: #d8c2a2;
+            --paper-border-dashed: rgba(186, 148, 100, 0.45);
+            --ink-primary: #24140e;
+            --ink-secondary: #4a3224;
+            --ink-muted: #785a44;
+            --accent-terracotta: #8a2a20;
+            --accent-gold: #b3834b;
+            --shadow-parchment: rgba(140, 95, 45, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* ─── PHASE 2: Live Wallpaper Effect (Pure CSS Continuous Gradient Animation) ─── */
+        @keyframes liveWallpaperShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        body {
+            background: linear-gradient(135deg, #16100c 0%, #2a180e 25%, #422a14 50%, #241710 75%, #16100c 100%);
+            background-size: 350% 350%;
+            animation: liveWallpaperShift 18s ease infinite;
+            color: var(--ink-primary);
+            font-family: 'Merriweather', 'Georgia', serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Subtle floating warm ambient glow */
+        .live-ambient-glow {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background: radial-gradient(circle at 50% 30%, rgba(212, 163, 89, 0.15), transparent 70%);
+            animation: pulseGlow 16s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { opacity: 0.35; transform: scale(0.96); }
+            100% { opacity: 0.75; transform: scale(1.04); }
+        }
+
+        .main-wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 24px 16px 60px 16px;
+        }
+
+        /* ─── Top Vintage Navigation Bar ─── */
+        .vintage-top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 12px 18px;
+            background: rgba(253, 248, 238, 0.92);
+            border: 1px solid var(--paper-edge);
+            border-radius: 999px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            margin-bottom: 30px;
+        }
+
+        .nav-book-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Cinzel', 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 0.84rem;
+            letter-spacing: 0.06em;
+            color: var(--ink-secondary);
+            text-decoration: none;
+            padding: 8px 18px;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            transition: all 0.25s ease;
+        }
+
+        .nav-book-btn:hover {
+            color: var(--accent-terracotta);
+            background: rgba(186, 148, 100, 0.18);
+            border-color: var(--paper-edge);
+            transform: translateY(-1px);
+        }
+
+        .nav-book-badge {
+            font-family: 'Cinzel', serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--accent-terracotta);
+            font-weight: 700;
+        }
+
+        /* ─── Header Bookplate & Title ─── */
+        .vintage-header-plate {
+            text-align: center;
+            padding: 20px 20px 28px 20px;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .ex-libris-seal {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.76rem;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: #d4a373;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .book-main-title {
+            font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(2.2rem, 6vw, 3.4rem);
+            font-weight: 700;
+            color: #fdf6eb;
+            letter-spacing: 0.01em;
+            margin-bottom: 12px;
+            text-shadow: 0 3px 12px rgba(0, 0, 0, 0.75);
+        }
+
+        .hindi-typewriter-tagline {
+            font-family: 'Kalam', cursive;
+            font-size: clamp(1.4rem, 3.5vw, 1.9rem);
+            color: #ffc97a;
+            margin: 12px auto 14px auto;
+            min-height: 38px;
+            line-height: 1.4;
+            max-width: 720px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+        }
+
+        .poetic-welcome {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-style: italic;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: rgba(253, 246, 235, 0.9);
+            max-width: 680px;
+            margin: 0 auto;
+            border-bottom: 1px solid rgba(216, 194, 162, 0.3);
+            padding-bottom: 18px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        /* ─── Category Filter Tabs ─── */
+        .folio-filters-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .folio-filter-pill {
+            background: rgba(253, 248, 238, 0.15);
+            border: 1px solid rgba(216, 194, 162, 0.4);
+            color: #fdf5e6;
+            font-family: 'Cinzel', serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            padding: 7px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: all 0.25s ease;
+        }
+
+        .folio-filter-pill:hover {
+            background: rgba(253, 248, 238, 0.3);
+            color: #ffffff;
+            border-color: var(--accent-gold);
+            transform: translateY(-1px);
+        }
+
+        .folio-filter-pill.active {
+            background: #d4a373;
+            color: #18100c;
+            border-color: #d4a373;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ─── Main Vintage Book Container ─── */
+        .vintage-book-stage {
+            background: #faf3e5;
+            border: 2px solid var(--paper-edge);
+            border-radius: 24px;
+            padding: 30px 22px;
+            box-shadow:
+                inset 0 0 70px rgba(150, 100, 50, 0.12),
+                inset 0 0 20px rgba(110, 75, 35, 0.08),
+                0 30px 70px rgba(0, 0, 0, 0.65);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Book spine center line */
+        .vintage-book-stage::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background: linear-gradient(180deg, transparent, rgba(186, 148, 100, 0.25) 20%, rgba(186, 148, 100, 0.25) 80%, transparent);
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        /* Sliding Track */
+        .vintage-pages-slider {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .vintage-folios-track {
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            padding: 10px 4px 20px 4px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-gold) var(--paper-dark);
+        }
+
+        .vintage-folios-track::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .vintage-folios-track::-webkit-scrollbar-track {
+            background: var(--paper-dark);
+            border-radius: 999px;
+        }
+
+        .vintage-folios-track::-webkit-scrollbar-thumb {
+            background: var(--accent-gold);
+            border-radius: 999px;
+        }
+
+        /* Individual Page Card */
+        .vintage-folio-card {
+            flex: 0 0 100%;
+            min-width: 290px;
+            max-width: 100%;
+            scroll-snap-align: center;
+            background: #fdfaf3;
+            border: 1.5px solid var(--paper-edge);
+            border-radius: 18px;
+            padding: 32px 30px;
+            box-shadow:
+                inset 0 0 45px rgba(170, 120, 60, 0.07),
+                0 10px 30px rgba(50, 30, 15, 0.08);
+            position: relative;
+            color: var(--ink-primary);
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .vintage-folio-card::before {
+            content: "";
+            position: absolute;
+            inset: 10px;
+            border: 1px dashed var(--paper-border-dashed);
+            border-radius: 12px;
+            pointer-events: none;
+        }
+
+        .folio-top-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+            border-bottom: 1px solid rgba(186, 148, 100, 0.3);
+            padding-bottom: 8px;
+        }
+
+        .folio-chapter-tag {
+            font-family: 'Cinzel', serif;
+            font-size: 0.76rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--accent-terracotta);
+            font-weight: 700;
+        }
+
+        .folio-page-num {
+            font-family: 'Cinzel', serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            color: var(--ink-muted);
+        }
+
+        .folio-poem-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(1.4rem, 4vw, 1.85rem);
+            font-weight: 700;
+            color: var(--ink-primary);
+            margin-bottom: 16px;
+        }
+
+        .vintage-poem-link {
+            color: var(--ink-primary) !important;
+            text-decoration: none !important;
+            border-bottom: 1.5px solid var(--accent-gold);
+            padding-bottom: 2px;
+            transition: all 0.25s ease;
+            display: inline-block;
+        }
+
+        .vintage-poem-link:hover {
+            color: var(--accent-terracotta) !important;
+            border-bottom-color: var(--accent-terracotta);
+            text-shadow: 0 0 10px rgba(138, 42, 32, 0.2);
+            transform: translateX(2px);
+        }
+
+        .folio-poem-body {
+            font-family: 'Merriweather', 'Georgia', serif;
+            font-size: 1.02rem;
+            line-height: 1.95;
+            color: var(--ink-secondary);
+            white-space: pre-line;
+            margin-bottom: 20px;
+        }
+
+        .folio-poem-body.hindi-script {
+            font-family: 'Rozha One', 'Merriweather', serif;
+            font-size: 1.06rem;
+            line-height: 2.05;
+        }
+
+        .folio-poem-body.english-script {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.08rem;
+            line-height: 1.9;
+        }
+
+        .folio-signature-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(186, 148, 100, 0.35);
+        }
+
+        .folio-signature {
+            font-size: 0.95rem;
+            color: var(--ink-muted);
+            letter-spacing: 0.04em;
+        }
+
+        .folio-signature .author-name {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.1rem;
+            color: var(--accent-terracotta);
+            margin-left: 6px;
+            font-weight: normal;
+            display: inline-block;
+            vertical-align: middle;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+        }
+
+        .folio-insta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: var(--ink-secondary);
+            background: rgba(186, 148, 100, 0.12);
+            border: 1px solid var(--paper-edge);
+            padding: 5px 14px;
+            border-radius: 999px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+
+        .folio-insta-btn:hover {
+            background: var(--ink-primary);
+            color: #fdf6e3;
+            border-color: var(--ink-primary);
+        }
+
+        /* Author Profile Grid */
+        .author-folio-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .author-folio-grid {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+        }
+
+        .author-portrait-frame {
+            position: relative;
+            flex-shrink: 0;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            padding: 6px;
+            background: linear-gradient(135deg, #d8bf9c, #8c5d33, #d8bf9c);
+            box-shadow: 0 10px 28px rgba(60, 35, 15, 0.22);
+            margin: 0 auto;
+        }
+
+        .author-portrait-frame img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            filter: sepia(0.12) contrast(1.05);
+            border: 2px solid #fff;
+        }
+
+        .author-seal-badge {
+            position: absolute;
+            bottom: -4px;
+            right: -4px;
+            background: var(--accent-terracotta);
+            color: #fdf5e6;
+            border: 2px solid #dfc79b;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 0.7rem;
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .author-section-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--ink-primary);
+            margin-bottom: 6px;
+        }
+
+        .author-prompt {
+            font-family: 'Cinzel', 'Merriweather', serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: var(--accent-terracotta);
+            margin-bottom: 6px;
+        }
+
+        .vintage-dropcap {
+            float: left;
+            font-family: 'Playfair Display', 'Rozha One', Georgia, serif;
+            font-size: 3rem;
+            line-height: 0.85;
+            padding-right: 8px;
+            padding-top: 4px;
+            color: var(--accent-terracotta);
+            font-weight: 700;
+        }
+
+        .vintage-ornament-divider {
+            text-align: center;
+            color: #ba986e;
+            font-size: 0.95rem;
+            letter-spacing: 0.35em;
+            margin: 16px 0;
+        }
+
+        /* ─── Navigation Control Bar ─── */
+        .slider-control-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(186, 148, 100, 0.3);
+        }
+
+        .book-turn-btn {
+            background: #ebd8bd;
+            border: 1.5px solid var(--paper-edge);
+            color: var(--ink-primary);
+            font-family: 'Cinzel', 'Playfair Display', serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            padding: 8px 18px;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(60, 35, 15, 0.08);
+        }
+
+        .book-turn-btn:hover {
+            background: var(--ink-primary);
+            color: #fdf5e6;
+            border-color: var(--ink-primary);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(36, 20, 14, 0.25);
+        }
+
+        .book-folio-dots {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .book-folio-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: #d8c2a2;
+            border: 1px solid #b89f7a;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            padding: 0;
+        }
+
+        .book-folio-dot.active {
+            background: var(--accent-terracotta);
+            border-color: #5c1810;
+            transform: scale(1.35);
+            box-shadow: 0 0 10px rgba(138, 42, 32, 0.4);
+        }
+
+        /* ─── Footer Section ─── */
+        .vintage-page-footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(216, 194, 162, 0.3);
+            color: rgba(253, 246, 235, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .vintage-page-footer a {
+            color: #ffc97a;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .vintage-page-footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 576px) {
+            .vintage-folio-card {
+                padding: 24px 18px;
+            }
+            .book-turn-btn {
+                padding: 6px 14px;
+                font-size: 0.78rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Live Wallpaper Ambient Glow Layer -->
+    <div class="live-ambient-glow" aria-hidden="true"></div>
+
+    <div class="main-wrapper">
+
+        <!-- ─── Top Navigation Bar ─── -->
+        <header class="vintage-top-nav">
+            <a href="/" class="nav-book-btn">
+                ← Return to Dashboard
+            </a>
+            <div class="nav-book-badge">
+                FROM THE DESK OF KAVYA · POETRY COLLECTION
+            </div>
+        </header>
+
+        <!-- ─── Header Bookplate & Title ─── -->
+        <section class="vintage-header-plate">
+            <div class="ex-libris-seal">
+                <span>❦ CREATOR'S SPACE · SWAR ❦</span>
+            </div>
+            <h1 class="book-main-title">Kavya's Art Gallery & Poems</h1>
+            
+            <!-- Typewriter Animated Hindi Tagline -->
+            <p id="typing-tagline" class="hindi-typewriter-tagline">"ये बुरा वक़्त नहीं, बस वो वक़्त है जो अभी मेरा नहीं है।"</p>
+            
+            <!-- Poetic Welcome Text -->
+            <p class="poetic-welcome">
+                Welcome to a quiet corner of the internet. Here, emotions find a voice and thoughts turn into verses. Step in, turn the pages, and explore peacefully.
+            </p>
+        </section>
+
+        <!-- ─── Category Filter Tabs ─── -->
+        <div class="folio-filters-bar" role="tablist" aria-label="Poetry categories">
+            <button type="button" class="folio-filter-pill active" onclick="filterFolios('all')">All Pages (7)</button>
+            <button type="button" class="folio-filter-pill" onclick="filterFolios('author')">About the Author (1)</button>
+            <button type="button" class="folio-filter-pill" onclick="filterFolios('hindi')">हिंदी कविताएं (3)</button>
+            <button type="button" class="folio-filter-pill" onclick="filterFolios('english')">English Poetry (3)</button>
+        </div>
+
+        <!-- ─── The Main Vintage Book Stage ─── -->
+        <main class="vintage-book-stage">
+
+            <div class="vintage-pages-slider">
+                <div class="vintage-folios-track" id="foliosTrack" onscroll="syncFolioDots()">
+
+                    <!-- ═══════════════════════════════════════════════════════════ -->
+                    <!-- CHAPTER I: ABOUT THE AUTHOR & THE SPARK                     -->
+                    <!-- ═══════════════════════════════════════════════════════════ -->
+                    <article class="vintage-folio-card" data-category="author" id="folio1">
+                        <div class="folio-top-meta">
+                            <span class="folio-chapter-tag">— CHAPTER I · THE AUTHOR —</span>
+                            <span class="folio-page-num">Page 1 of 7</span>
+                        </div>
+                        <div class="author-folio-grid">
+                            <div class="author-portrait-frame">
+                                <img src="{{ url_for('static', filename='creator profile.jpeg') }}" alt="Kavya Singh - Creator of SWAR">
+                                <div class="author-seal-badge" title="Authentic Edition">KS</div>
+                            </div>
+                            <div class="flex-grow-1 text-start">
+                                <h3 class="author-section-title mb-1">Kavya Singh</h3>
+                                <p class="author-prompt mb-3">Artist · Writer · Developer — Noida</p>
+                                
+                                <div class="mb-4">
+                                    <h4 class="author-section-title" style="font-size:1.2rem; color:var(--accent-terracotta);">About Me</h4>
+                                    <p class="folio-poem-body mb-3">
+                                        <span class="vintage-dropcap">I</span>’m <strong>Kavya Singh from Noida</strong> — an artist, writer, and developer drawn to the connection between creativity, technology, and emotion. I find rhythm in words, inspiration in changing skies, and stories in the quiet moments of everyday life.
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <h4 class="author-section-title" style="font-size:1.2rem; color:var(--accent-terracotta);">The Story Behind SWAR</h4>
+                                    <p class="folio-poem-body mb-3">
+                                        <span class="vintage-dropcap">S</span>WAR was born from a simple observation: our emotions often seem to move with the world around us. A rainy afternoon can feel reflective, a bright morning can bring energy, and a quiet evening can invite us to slow down.
+                                    </p>
+                                    <p class="folio-poem-body mb-3">
+                                        I wanted to turn this connection between <strong>mood and atmosphere</strong> into an experience.
+                                    </p>
+                                    <p class="folio-poem-body mb-3">
+                                        SWAR is an atmospheric space that brings together <strong>music, cinema, poetry, and books</strong>, thoughtfully curated around the weather and emotional feeling of the moment. Instead of simply choosing what to listen to or watch, SWAR invites you to discover something that <em>feels right</em> for where you are, both outside and within.
+                                    </p>
+                                    <p class="folio-poem-body mb-0">
+                                        It is my attempt to create a small digital haven where <strong>weather meets emotion, and emotion finds its soundtrack.</strong>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="vintage-ornament-divider">❦ ──────── ✤ ──────── ❦</div>
+
+                        <div class="folio-signature-row">
+                            <div class="folio-signature">
+                                Published by <span class="author-name">Kavya Singh</span>
+                            </div>
+                            <a href="https://www.instagram.com/kavyyaa.singhh/" target="_blank" rel="noopener noreferrer" class="folio-insta-btn">
+                                Instagram Profile ↗
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- ═══════════════════════════════════════════════════════════ -->
+                    <!-- CHAPTER II: منتظر 🕰️ (मुंतज़िर)                             -->
+                    <!-- ═══════════════════════════════════════════════════════════ -->
+                    <article class="vintage-folio-card" data-category="hindi" id="folio2">
+                        <div class="folio-top-meta">
+                            <span class="folio-chapter-tag">— CHAPTER II · HINDI POETRY —</span>
+                            <span class="folio-page-num">Page 2 of 7</span>
+                        </div>
+                        
+                        <h2 class="folio-poem-title">
+                            <a href="https://www.instagram.com/reel/DSXudK-Cd0Z/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener noreferrer" class="vintage-poem-link">
+                                منتظر 🕰️ (मुंतज़िर) ↗
+                            </a>
+                        </h2>
+
+                        <div class="folio-poem-body hindi-script">
+लोग कहते हैं इंतज़ार मुश्किल है,
+पर मुझे लगता है ये एक कला है।
+जब मैं शाम को ढलते हुए देखती हूँ ना,
+तो लगता है जैसे मैं वक़्त ज़ाया नहीं कर रही,
+बस तुम्हारे लिए वक़्त संजो रही हूँ।
+क्योंकि इंतज़ार मेरे लिए बेचैनी नहीं, एक यक़ीन है,
+घड़ी की सुइयों से अब शिकायत नहीं होती,
+मैंने हर पल में तेरा एहसास संभाल रखा है।
+तू आना अपनी मर्ज़ी से जब दिल करे तेरा,
+मैंने अपनी धड़कनों को तेरी आहट के लिए रोक रखा है।
+लोग इसे पागलपन कहते हैं,
+पर सच कहूँ?
+दुनिया थक गई होगी वक़्त के साथ भागते-भागते,
+पर तेरे इंतज़ार में ठहरना मेरा सबसे बड़ा गुरूर है।
+                        </div>
+
+                        <div class="vintage-ornament-divider">❦ ──────── ✤ ──────── ❦</div>
+
+                        <div class="folio-signature-row">
+                            <div class="folio-signature">
+                                Published by <span class="author-name">Kavya Singh</span>
+                            </div>
+                            <a href="https://www.instagram.com/reel/DSXudK-Cd0Z/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener noreferrer" class="folio-insta-btn">
+                                View Original Reel ↗
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- ═══════════════════════════════════════════════════════════ -->
+                    <!-- CHAPTER III: खूबसूरत 14 वर्ष!✨                             -->
+                    <!-- ═══════════════════════════════════════════════════════════ -->
+                    <article class="vintage-folio-card" data-category="hindi" id="folio3">
+                        <div class="folio-top-meta">
+                            <span class="folio-chapter-tag">— CHAPTER III · HINDI POETRY —</span>
+                            <span class="folio-page-num">Page 3 of 7</span>
+                        </div>
+                        
+                        <h2 class="folio-poem-title">
+                            <a href="https://www.instagram.com/p/C9C00JSyPzA/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener noreferrer" class="vintage-poem-link">
+                                खूबसूरत 14 वर्ष!✨ ↗
+                            </a>
+                        </h2>
+
+                        <div class="folio-poem-body hindi-script">
+आज वो दिन भी आ गया
+मानो स्कूल जाते बच्चों को देख लगा
+गर्मियों की छुट्टियां खत्म हुईं
+अब मेरा स्कूल जाने का वक्त आ गया
+मगर वास्तव में तो यह ख्याल
+अब बस एक खूबसूरत सा सफर बनके रह गया।
+
+याद आते हैं वो दिन,
+जब मैं अपने सीनियर्स को जाते देख सोचा करती थी,
+की किसी दिन मैं भी ऐसे नम आंखों और खूब सारी यादों के साथ स्कूल से विदा लूंगी,
+पता ही न चला कब पलक झपकते ही,आज यह दिन भी आ गया।
+
+स्कूल के आखिरी दिनों में,
+क्लास में दोस्तों के साथ बैठकर, लंच की घंटी बजते ही ग्राउंड में जाने की उत्सुकता को महसूस कर,एनुअल डे की तैयारी वाले दिनों स्कूल में समय बिता कर और टीचर्स की भावपूर्ण बातें सुन कर,
+लगता था कि काश चंद दिन और मिल जाएं,अभी स्कूल से हमेशा के लिए जाने की इच्छा नहीं है,
+और यही अपेक्षा करते हुए आज,
+मेरी जिंदगी के 14 वर्ष St Fidelis में संपन्न हो गए।
+
+मैं खुद को बहुत भाग्यशाली मानती हूं कि मुझे अपने स्कूल से फेयरवेल जूनियर विंग के उस ग्राउंड में मिला,
+जिस पर मैने अपने स्कूल के पहले दिन कदम रखा था,
+और एक नई जिंदगी की शुरुआत की थी...
+इस दिन मुझे यह भावुक एहसास हुआ कि,
+इस स्कूल से प्राप्त हुई शिक्षा की मैं सदैव आभारी रहूंगी,
+और यहां के शिक्षकों द्वारा दी हुई प्रेरणा और अधिक स्नेह,
+मेरे मन में हमेशा जीवित रहेंगे।
+~ 𝐊𝐚𝐯𝐲𝐚 𝐒𝐢𝐧𝐠𝐡, 𝐅𝐢𝐝𝐞𝐥𝐢𝐚𝐧 2010-2024
+                        </div>
+
+                        <div class="vintage-ornament-divider">❦ ──────── ✤ ──────── ❦</div>
+
+                        <div class="folio-signature-row">
+                            <div class="folio-signature">
+                                Published by <span class="author-name">Kavya Singh</span>
+                            </div>
+                            <a href="https://www.instagram.com/p/C9C00JSyPzA/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener noreferrer" class="folio-insta-btn">
+                                View Original Post ↗
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- ═══════════════════════════════════════════════════════════ -->
+                    <!-- CHAPTER IV: उलझनें, कुछ पन्ने और मैं। 📖                    -->
+                    <!-- ═══════════════════════════════════════════════════════════ -->
+                    <article class="vintage-folio-card" data-category="hindi" id="folio4">
+                        <div class="folio-top-meta">
+                            <span class="folio-chapter-tag">— CHAPTER IV · HINDI POETRY —</span>
+                            <span class="folio-page-num">Page 4 of 7</span>
+                        </div>
+                        
+                        <h2 class="folio-poem-title">
+                            <a href="https://www.instagram.com/reel/DX14OQCNr3Q/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener noreferrer" class="vintage-poem-link">
+                                उलझनें, कुछ पन्ने और मैं। 📖 ↗
+                            </a>
+                        </h2>
+
+                        <div class="folio-poem-body hindi-script">
+कभी-कभी सोचती हूँ,
+कि मैं बहुत ज़्यादा सोचती हूँ,
+उन पलों के बारे में,
+जो बरसो में सिर्फ एक बार आते हैं...
+​मेरी दुनिया, जो बड़े सलीके से चल रही थी,
+उसमें बेवजह चट्टानें ले आते हैं।
+हर बात की वजह खुद को समझने लगती हूँ,
+जैसे कि मैं ही एक 'मसला' (problem) हूँ। 
+​ना कोई समझता है, ना समझ सकता है,
+सब अपने ही खिलाफ लगने लगते हैं...
+उस पल लगता है जैसे कोई अपना नहीं है, 
+सिर्फ ये डायरी ही मेरी अपनी है।
+​अपनों से दूर, पेड़ों के नीचे बैठी मैं,
+जब वो गर्म हवा मेरे चेहरे को छूकर गुज़री,
+तो लगा... शायद ये वक्त भी गुज़र ही जाएगा?
+​मैं इसे 'बुरा वक्त' नहीं कहूँगी,
+ये तो केवल वो समय है, जो मेरा अपना नहीं है।
+                        </div>
+
+                        <div class="vintage-ornament-divider">❦ ──────── ✤ ──────── ❦</div>
+
+                        <div class="folio-signature-row">
+                            <div class="folio-signature">
+                                Published by <span class="author-name">Kavya Singh</span>
+                            </div>
+                            <a href="https://www.instagram.com/reel/DX14OQCNr3Q/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener noreferrer" class="folio-insta-btn">
+                                View Original Reel ↗
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- ═══════════════════════════════════════════════════════════ -->
+                    <!-- CHAPTER V: 𝑻𝒉𝒐𝒓𝒏𝒔 𝒂𝒏𝒅 𝑹𝒐𝒔𝒆𝒔🥀                             -->
+                    <!-- ═══════════════════════════════════════════════════════════ -->
+                    <article class="vintage-folio-card" data-category="english" id="folio5">
+                        <div class="folio-top-meta">
+                            <span class="folio-chapter-tag">— CHAPTER V · ENGLISH POETRY —</span>
+                            <span class="folio-page-num">Page 5 of 7</span>
+                        </div>
+                        
+                        <h2 class="folio-poem-title">
+                            <a href="https://www.instagram.com/p/DYtruWhN2_S/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener noreferrer" class="vintage-poem-link">
+                                𝑻𝒉𝒐𝒓𝒏𝒔 𝒂𝒏𝒅 𝑹𝒐𝒔𝒆𝒔🥀 ↗
+                            </a>
+                        </h2>
+
+                        <div class="folio-poem-body english-script">
+𝑊𝑒 𝑏𝑢𝑖𝑙𝑑 𝑎 𝑙𝑖𝑓𝑒 𝑜𝑛 𝑡ℎ𝑒 𝑝𝑟𝑜𝑚𝑖𝑠𝑒 𝑜𝑓 𝑠𝑝𝑟𝑖𝑛𝑔,
+𝑂𝑛𝑙𝑦 𝑡𝑜 𝑤𝑎𝑡𝑐ℎ 𝑡ℎ𝑒 𝑤𝑎𝑙𝑙𝑠 𝑓𝑎𝑙𝑙 𝑎𝑝𝑎𝑟𝑡..
+𝐻𝑜𝑤 𝑠𝑡𝑟𝑎𝑛𝑔𝑒 𝑡𝑜 𝑠𝑒𝑒 𝑎 𝑠ℎ𝑎𝑟𝑒𝑑 𝑝𝑎𝑡ℎ 𝑢𝑛𝑟𝑎𝑣𝑒𝑙,
+𝐿𝑖𝑘𝑒 𝑎 𝑡ℎ𝑟𝑒𝑎𝑑 𝑝𝑢𝑙𝑙𝑖𝑛𝑔 𝑠𝑙𝑜𝑤𝑙𝑦 𝑓𝑟𝑜𝑚 𝑡ℎ𝑒 𝑐𝑙𝑜𝑡ℎ.
+𝐴 𝑞𝑢𝑖𝑒𝑡 𝑣𝑜𝑤 𝑖𝑠 𝑚𝑎𝑑𝑒 𝑖𝑛 𝑡ℎ𝑒 𝑑𝑒𝑒𝑝 𝑜𝑐𝑒𝑎𝑛 𝑜𝑓 𝑡ℎ𝑒 𝑚𝑖𝑛𝑑-
+𝐓𝐨 𝐧𝐞𝐯𝐞𝐫 𝐰𝐞𝐞𝐩 𝐟𝐨𝐫 𝐭𝐡𝐞 𝐡𝐚𝐧𝐝 𝐭𝐡𝐚𝐭 𝐡𝐨𝐥𝐝𝐬 𝐲𝐨𝐮𝐫 𝐨𝐰𝐧.
+𝑌𝑒𝑡 𝑏𝑒𝑛𝑒𝑎𝑡ℎ 𝑡ℎ𝑒 𝑤𝑒𝑖𝑔ℎ𝑡 𝑜𝑓 𝑎 𝑑𝑎𝑟𝑘𝑒𝑛𝑖𝑛𝑔 𝑠𝑘𝑦,
+𝑊𝑒 𝑚𝑜𝑢𝑟𝑛 𝑓𝑜𝑟 𝑡ℎ𝑒 𝑠ℎ𝑒𝑙𝑡𝑒𝑟 𝑤𝑒 𝑡ℎ𝑜𝑢𝑔ℎ𝑡 𝑤𝑒 𝑓𝑜𝑢𝑛𝑑,
+𝑂𝑛𝑙𝑦 𝑡𝑜 𝑓𝑖𝑛𝑑 𝑡ℎ𝑒 𝑑𝑜𝑜𝑟 𝑙𝑜𝑐𝑘𝑒𝑑 𝑡𝑖𝑔ℎ𝑡.
+
+𝑇ℎ𝑒 𝑠𝑝𝑜𝑘𝑒𝑛 𝑤𝑜𝑟𝑑ｓ 𝑎𝑟𝑟𝑖𝑣𝑒 𝑙𝑖𝑘𝑒 𝑒𝑚𝑝𝑡𝑦 𝑝𝑟𝑜𝑚𝑖𝑠𝑒𝑠
+𝑉𝑜𝑖𝑐𝑒𝑠 𝑤𝑖𝑡ℎ 𝑛𝑜 ℎ𝑒𝑎𝑟𝑡𝑏𝑒𝑎𝑡 𝑙𝑒𝑓𝑡 𝑖𝑛ｓ𝑖𝑑𝑒..
+𝐴𝑛𝑑 𝑖𝑡 𝑖𝑠 𝑡ℎ𝑒 𝑜𝑙𝑑𝑒𝑠𝑡, 𝑙𝑜𝑛𝑙𝑖𝑒𝑠𝑡 ℎ𝑢𝑚𝑎𝑛 𝑡𝑟𝑢𝑡ℎ
+𝐓𝐨 𝐫𝐞𝐚𝐥𝐢𝐬𝐞 𝐰𝐞 𝐚𝐫𝐞 𝐧𝐚𝐯𝐢𝐠𝐚𝐭𝐢𝐧𝐠 𝑡ℎ𝑒 𝑡ℎ𝐨𝐫𝐧ｓ,
+𝐍𝐨𝐭 𝐡𝐚𝐧𝐝 𝑖𝑛 ℎ𝐚𝐧𝑑,
+𝐁𝐮𝑡 𝐞𝐧𝐭𝐢𝐫𝐞𝐥𝐲, 𝒒𝒖𝒊𝒆𝒕𝒍𝒚, 𝐴𝑙𝑜𝑛𝑒.
+                        </div>
+
+                        <div class="vintage-ornament-divider">❦ ──────── ✤ ──────── ❦</div>
+
+                        <div class="folio-signature-row">
+                            <div class="folio-signature">
+                                Published by <span class="author-name">Kavya Singh</span>
+                            </div>
+                            <a href="https://www.instagram.com/p/DYtruWhN2_S/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener noreferrer" class="folio-insta-btn">
+                                View Original Post ↗
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- ═══════════════════════════════════════════════════════════ -->
+                    <!-- CHAPTER VI: 𝑨𝒖𝒕𝒖𝒎𝒏’𝒔 𝑨𝒏𝒂𝒕𝒐𝒎𝒚🍂                             -->
+                    <!-- ═══════════════════════════════════════════════════════════ -->
+                    <article class="vintage-folio-card" data-category="english" id="folio6">
+                        <div class="folio-top-meta">
+                            <span class="folio-chapter-tag">— CHAPTER VI · ENGLISH POETRY —</span>
+                            <span class="folio-page-num">Page 6 of 7</span>
+                        </div>
+                        
+                        <h2 class="folio-poem-title">
+                            <a href="https://www.instagram.com/p/DVie7-QiZ4E/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener noreferrer" class="vintage-poem-link">
+                                𝑨𝒖𝒕𝒖𝒎𝒏’𝒔 𝑨𝒏𝒂𝒕𝒐𝒎𝒚🍂 ↗
+                            </a>
+                        </h2>
+
+                        <div class="folio-poem-body english-script">
+My heart remembers the warmth it felt,
+The selfless giver it used to be.
+Strangely now, I am unknown to those emotions,
+Which might have faded from me.
+​
+Just as our fingers remember the piano keys,
+The guitar strings, and the notes to pull,
+Finding their way with a natural ease,
+Because the rhythm engraved once felt so serene..
+
+For a human heart is as fragile as a tune:
+One wrong note and the song is ruined,
+One wrong step and our heart shatters,
+But the courage to try is all that matters.
+
+​Autumn returns, magically gloomy,
+As I succumb to my own anatomy;
+I harvest the strength from the seeds I’ve sown,
+Carving a path through the dark,alone.
+                        </div>
+
+                        <div class="vintage-ornament-divider">❦ ──────── ✤ ──────── ❦</div>
+
+                        <div class="folio-signature-row">
+                            <div class="folio-signature">
+                                Published by <span class="author-name">Kavya Singh</span>
+                            </div>
+                            <a href="https://www.instagram.com/p/DVie7-QiZ4E/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener noreferrer" class="folio-insta-btn">
+                                View Original Post ↗
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- ═══════════════════════════════════════════════════════════ -->
+                    <!-- CHAPTER VII: THE SMELL OF EARTH AFTER RAIN☔                 -->
+                    <!-- ═══════════════════════════════════════════════════════════ -->
+                    <article class="vintage-folio-card" data-category="english" id="folio7">
+                        <div class="folio-top-meta">
+                            <span class="folio-chapter-tag">— CHAPTER VII · ENGLISH POETRY —</span>
+                            <span class="folio-page-num">Page 7 of 7</span>
+                        </div>
+                        
+                        <h2 class="folio-poem-title">
+                            <a href="https://www.instagram.com/p/DIt7xk5SWLw/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener noreferrer" class="vintage-poem-link">
+                                THE SMELL OF EARTH AFTER RAIN☔ ↗
+                            </a>
+                        </h2>
+
+                        <div class="folio-poem-body english-script">
+The moment I hear the raindrops fall,
+I sense a sudden urge to go out for a stroll..
+To get drenched in rain, and feel a subtle strange pain, with all that gone in vain..
+The sight of tiny raindrops falling one by one on the dry surface,gets washed away just like that, leaving no trace..
+Thunder sparks, pulling me out of my delusional past, Along with the drops falling down on my face, acting like camouflage..
+I look above in the sky,only to see the clouds go wild..
+But I don't fear them anymore,
+As it makes my mind reminiscent about all those things, I abhor..
+Once again the sun shines after one of those gloomy nights,
+The rays fall in my sombre eyes,
+Until I realise, it's a new dawn,
+glimmering light..
+
+And all that I remember from that moment,
+Is The smell of earth after rain,
+Echoing in my anatomy
+Keeping me sane.
+                        </div>
+
+                        <div class="vintage-ornament-divider">❦ ──────── ✤ ──────── ❦</div>
+
+                        <div class="folio-signature-row">
+                            <div class="folio-signature">
+                                Published by <span class="author-name">Kavya Singh</span>
+                            </div>
+                            <a href="https://www.instagram.com/p/DIt7xk5SWLw/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener noreferrer" class="folio-insta-btn">
+                                View Original Post ↗
+                            </a>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+
+            <!-- ─── Slider Navigation Controls & Page Dots ─── -->
+            <div class="slider-control-bar">
+                <button type="button" class="book-turn-btn" onclick="turnFolioPage(-1)" aria-label="Previous Page">
+                    ⟨ Previous Page
+                </button>
+                <div class="book-folio-dots" id="folioDotsContainer" aria-label="Page selection">
+                    <button type="button" class="book-folio-dot active" onclick="goToFolioIndex(0)" title="Chapter 1: About Author"></button>
+                    <button type="button" class="book-folio-dot" onclick="goToFolioIndex(1)" title="Chapter 2: मुंतज़िर"></button>
+                    <button type="button" class="book-folio-dot" onclick="goToFolioIndex(2)" title="Chapter 3: खूबसूरत 14 वर्ष"></button>
+                    <button type="button" class="book-folio-dot" onclick="goToFolioIndex(3)" title="Chapter 4: उलझनें, कुछ पन्ने और मैं"></button>
+                    <button type="button" class="book-folio-dot" onclick="goToFolioIndex(4)" title="Chapter 5: Thorns and Roses"></button>
+                    <button type="button" class="book-folio-dot" onclick="goToFolioIndex(5)" title="Chapter 6: Autumn's Anatomy"></button>
+                    <button type="button" class="book-folio-dot" onclick="goToFolioIndex(6)" title="Chapter 7: The Smell of Earth"></button>
+                </div>
+                <button type="button" class="book-turn-btn" onclick="turnFolioPage(1)" aria-label="Next Page">
+                    Next Page ⟩
+                </button>
+            </div>
+
+        </main>
+
+        <!-- ─── Footer Section ─── -->
+        <footer class="vintage-page-footer">
+            <p class="mb-1">SWAR — Sync Your Vibe · Created with soul in Noida by Kavya Singh</p>
+            <p class="small mb-0 opacity-75">Designed in the style of a classic, hand-written poetry notebook.</p>
+        </footer>
+
+    </div>
+
+    <!-- ─── Interactive Script ─── -->
+    <script>
+        // Typewriter Animation for Hindi Tagline
+        document.addEventListener("DOMContentLoaded", function() {
+            const taglineElement = document.getElementById("typing-tagline");
+            if (taglineElement) {
+                const originalText = taglineElement.innerText.trim();
+                taglineElement.innerText = "";
+                let i = 0;
+                function typeWriter() {
+                    if (i < originalText.length) {
+                        taglineElement.innerText += originalText.charAt(i);
+                        i++;
+                        setTimeout(typeWriter, 55);
+                    }
+                }
+                setTimeout(typeWriter, 700);
+            }
+        });
+
+        // Page Sliding Functions
+        function turnFolioPage(direction) {
+            const track = document.getElementById("foliosTrack");
+            if (!track) return;
+            const visibleCard = track.querySelector(".vintage-folio-card:not([style*='display: none'])");
+            const cardWidth = visibleCard ? visibleCard.offsetWidth + 24 : 350;
+            track.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+        }
+
+        function goToFolioIndex(index) {
+            const track = document.getElementById("foliosTrack");
+            if (!track) return;
+            const cards = track.querySelectorAll(".vintage-folio-card");
+            if (cards[index]) {
+                cards[index].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }
+        }
+
+        function syncFolioDots() {
+            const track = document.getElementById("foliosTrack");
+            if (!track) return;
+            const cards = track.querySelectorAll(".vintage-folio-card");
+            const dots = document.querySelectorAll(".book-folio-dot");
+            const scrollLeft = track.scrollLeft;
+            
+            let closestIndex = 0;
+            let minDistance = Infinity;
+
+            cards.forEach((card, i) => {
+                const cardLeft = card.offsetLeft - track.offsetLeft;
+                const dist = Math.abs(scrollLeft - cardLeft);
+                if (dist < minDistance) {
+                    minDistance = dist;
+                    closestIndex = i;
+                }
+            });
+
+            dots.forEach((dot, i) => {
+                dot.classList.toggle("active", i === closestIndex);
+            });
+        }
+
+        // Category Filtering Function
+        function filterFolios(category) {
+            document.querySelectorAll('.folio-filter-pill').forEach(pill => {
+                pill.classList.remove('active');
+            });
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+
+            const cards = document.querySelectorAll('.vintage-folio-card');
+            cards.forEach(card => {
+                const cardCat = card.getAttribute('data-category');
+                if (category === 'all' || cardCat === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            const track = document.getElementById("foliosTrack");
+            if (track) track.scrollTo({ left: 0, behavior: 'smooth' });
+        }
+
+        // Keyboard Arrow Navigation for book flipping
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "ArrowLeft") {
+                turnFolioPage(-1);
+            } else if (event.key === "ArrowRight") {
+                turnFolioPage(1);
+            }
+        });
+    </script>
+</body>
+</html>
