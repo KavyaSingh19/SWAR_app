@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, render_template, request
-from google import genai
+import google.generativeai as genai
 from datetime import datetime
 import requests
 import json
