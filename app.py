@@ -168,7 +168,7 @@ def get_vibe():
     
 
     try:
-        from google.genai import types
+        from google.generativeai import types
         creative_config = types.GenerateContentConfig(
             temperature=1.0,
             top_p=0.95
@@ -1382,7 +1382,7 @@ User: {user_message}
 """
 
     try:
-        from google.genai import types
+        from google.generativeai import types
         config = types.GenerateContentConfig(temperature=0.85, top_p=0.9, max_output_tokens=220)
         response = client.models.generate_content(
             model="gemini-2.5-flash",
