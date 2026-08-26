@@ -7,7 +7,7 @@
     <title>Swar - Sync Your Vibe</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Orbitron:wght@500;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Cinzel:wght@500;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Yatra+One&family=Rozha+One&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logo.png') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css"/>
 
     <style>
@@ -2224,7 +2224,7 @@
                         let name = track.name ? track.name : track;
                         let imgRaw = track.img;
                         if (!imgRaw) {
-                            imgRaw = (selectedCategory === 'BlogsAndPodcasts') ? '/static/images/pod.jpg' : '/static/images/vinyl.gif';
+                            imgRaw = (selectedCategory === 'BlogsAndPodcasts') ? '/static/pod.jpg' : '/static/vinyl.gif';
                         }
                         // Make path absolute so CSS background-image never gets a relative-path 404
                         const img = imgRaw.startsWith('http') ? imgRaw : _base + imgRaw;
@@ -2260,11 +2260,11 @@
                         let imgRaw = movie.img;
                         if (!imgRaw) {
                             if (selectedCategory === 'Novels') {
-                                imgRaw = '/static/images/novels.jpg';
+                                imgRaw = '/static/novels.jpg';
                             } else if (selectedCategory === 'BlogsAndPodcasts') {
-                                imgRaw = '/static/images/Blogging.jpg';
+                                imgRaw = '/static/Blogging.jpg';
                             } else {
-                                imgRaw = '/static/images/movieicon.jpg';
+                                imgRaw = '/static/movieicon.jpg';
                             }
                         }
                         // Make path absolute
@@ -2828,5 +2828,49 @@
     <script src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
     <!-- html2canvas: placed before </body> to avoid render-blocking -->
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <!-- SHARE BUTTON UI -->
+<div style="text-align: center; margin-top: 15px;">
+    <button id="shareVibeBtn" style="background: linear-gradient(45deg, #ff007f, #7f00ff); color: white; padding: 12px 24px; border: none; border-radius: 25px; font-weight: bold; cursor: pointer; z-index: 999; position: relative;">Share My Vibe 🚀</button>
+</div>
+
+<!-- SHARE BUTTON LOGIC -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+document.getElementById('shareVibeBtn').addEventListener('click', function() {
+    const btn = this;
+    const originalText = btn.innerHTML;
+    btn.innerHTML = "Generating... ⏳";
+
+    // Ticket wale div ki ID daalein (Make sure your ticket div has id="vibe-ticket")
+    const ticket = document.getElementById('vibe-ticket') || document.querySelector('.vip-ticket'); // fallback selector
+    
+    if(!ticket) {
+        alert("Ticket not found to share!");
+        btn.innerHTML = originalText;
+        return;
+    }
+
+    html2canvas(ticket, { scale: 2, useCORS: true, backgroundColor: null }).then(canvas => {
+        canvas.toBlob(function(blob) {
+            const file = new File([blob], 'My-Swar-Vibe.png', { type: 'image/png' });
+            
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                navigator.share({
+                    files: [file],
+                    title: 'My SWAR Vibe',
+                    text: 'Check out my customized SWAR Vibe! 🎵✨ Create yours at: https://swar-sync.onrender.com'
+                }).then(() => btn.innerHTML = originalText)
+                  .catch(() => btn.innerHTML = originalText);
+            } else {
+                const link = document.createElement('a');
+                link.download = 'My-Swar-Vibe.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                btn.innerHTML = originalText;
+            }
+        });
+    });
+});
+</script>
 </body>
 </html>
