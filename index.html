@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Orbitron:wght@500;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Cinzel:wght@500;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Yatra+One&family=Rozha+One&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css"/>
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
     <style>
         :root,
         body[data-mood="neutral"] {
@@ -1857,7 +1857,7 @@
                                 </div>
                             </div>
                         </div>
-                        <article class="vip-ticket" aria-label="VIP Vibe Capsule ticket">
+                        <article class="vip-ticket" id="vibe-ticket" aria-label="VIP Vibe Capsule ticket">
                             <div class="vip-hologram"></div>
                             <div class="vip-stamp" id="vipStamp">VIP · ADMIT</div>
                             <div class="vip-kicker">SWAR CONCERT NIGHT</div>
@@ -2218,23 +2218,30 @@
                 }
 
                 if (data.music && Array.isArray(data.music)) {
+                    // Build absolute base URL once so background-image resolves on all hosts
+                    const _base = window.location.origin;
                     data.music.forEach((track) => {
                         let name = track.name ? track.name : track;
-                        let img = track.img;
-                        // Fix image paths: ensure they use /static/images/ prefix
-                        if (!img) {
-                            img = (selectedCategory === 'BlogsAndPodcasts') ? '/static/images/pod.jpg' : '/static/images/vinyl.gif';
+                        let imgRaw = track.img;
+                        if (!imgRaw) {
+                            imgRaw = (selectedCategory === 'BlogsAndPodcasts') ? '/static/images/pod.jpg' : '/static/images/vinyl.gif';
                         }
+                        // Make path absolute so CSS background-image never gets a relative-path 404
+                        const img = imgRaw.startsWith('http') ? imgRaw : _base + imgRaw;
                         let searchUrl = `https://open.spotify.com/search/${encodeURIComponent(name)}`;
                         musicRow.innerHTML += `
                             <div class="col-md-6 col-12 mb-4">
                                 <div class="media-card card text-white h-100">
-                                    <div style="background-image: url('${img}'); background-size: cover; background-position: center; min-height: 220px;" class="d-flex flex-column">
-                                        <div class="p-3 text-start d-flex flex-column justify-content-end flex-grow-1" style="background: linear-gradient(to top, rgba(0,0,0,0.92), rgba(0,0,0,0.08));">
+                                    <div style="position:relative; min-height:220px; background-color:#111; overflow:hidden;" class="d-flex flex-column">
+                                        <img src="${img}" alt="" aria-hidden="true"
+                                             onerror="this.style.display='none'"
+                                             style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.92;">
+                                        <div class="p-3 text-start d-flex flex-column justify-content-end flex-grow-1"
+                                             style="position:relative;z-index:1;background:linear-gradient(to top,rgba(0,0,0,0.93),rgba(0,0,0,0.06));">
                                             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                                                <h5 class="fw-bold text-white mb-0 me-2" style="flex: 1; min-width: 140px;">${name}</h5>
+                                                <h5 class="fw-bold text-white mb-0 me-2" style="flex:1;min-width:140px;">${name}</h5>
                                                 <a href="${searchUrl}" target="_blank" rel="noopener noreferrer" class="spotify-pill-btn">
-                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.48.66.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141 C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.18-.1.2-1.02-.12-1.2-.18-.6-.12-1.2.18-1.02 4.2-1.26 11.28-.96 15.72 1.26.6.361.78.96.42 1.26-.36.18-.96-.06-1.26-.6-1.38-4.98-1.08-12.48.24-13.86 1.62-.66.18-1.32.78-1.14 1.38z"/></svg>
+                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.48.66.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.18-.1.2-1.02-.12-1.2-.18-.6-.12-1.2.18-1.02 4.2-1.26 11.28-.96 15.72 1.26.6.361.78.96.42 1.26-.36.18-.96-.06-1.26-.6-1.38-4.98-1.08-12.48.24-13.86 1.62-.66.18-1.32.78-1.14 1.38z"/></svg>
                                                     Listen on Spotify ↗
                                                 </a>
                                             </div>
@@ -2247,31 +2254,38 @@
                 }
 
                 if (data.movies && Array.isArray(data.movies)) {
+                    const _base2 = window.location.origin;
                     data.movies.forEach((movie) => {
                         let name = movie.name ? movie.name : movie;
-                        let img = movie.img;
-                        if (!img) {
+                        let imgRaw = movie.img;
+                        if (!imgRaw) {
                             if (selectedCategory === 'Novels') {
-                                img = '/static/images/novels.jpg';
+                                imgRaw = '/static/images/novels.jpg';
                             } else if (selectedCategory === 'BlogsAndPodcasts') {
-                                img = '/static/images/Blogging.jpg';
+                                imgRaw = '/static/images/Blogging.jpg';
                             } else {
-                                img = '/static/images/movieicon.jpg';
+                                imgRaw = '/static/images/movieicon.jpg';
                             }
                         }
-                        let searchSuffix = (selectedCategory === 'Novels') ? "+book+summary+or+buy" :
-                                           (selectedCategory === 'BlogsAndPodcasts') ? "+blog+or+newsletter" :
-                                           "+where+to+watch";
-                        let cardText = (selectedCategory === 'Novels') ? "Open this book ↗" :
-                                       (selectedCategory === 'BlogsAndPodcasts') ? "Read this blog ↗" :
-                                       "Where to watch ↗";
+                        // Make path absolute
+                        const img = imgRaw.startsWith('http') ? imgRaw : _base2 + imgRaw;
+                        let searchSuffix = (selectedCategory === 'Novels') ? '+book+summary+or+buy' :
+                                           (selectedCategory === 'BlogsAndPodcasts') ? '+blog+or+newsletter' :
+                                           '+where+to+watch';
+                        let cardText = (selectedCategory === 'Novels') ? 'Open this book ↗' :
+                                       (selectedCategory === 'BlogsAndPodcasts') ? 'Read this blog ↗' :
+                                       'Where to watch ↗';
                         let searchUrl = `https://www.google.com/search?q=${encodeURIComponent(name)}${searchSuffix}`;
                         moviesRow.innerHTML += `
                             <div class="col-md-6 col-12 mb-4">
                                 <a href="${searchUrl}" target="_blank" class="text-decoration-none d-block h-100 w-100">
                                     <div class="media-card card text-white h-100">
-                                        <div style="background-image: url('${img}'); background-size: cover; background-position: top center; min-height: 260px;" class="d-flex flex-column">
-                                            <div class="p-3 text-start d-flex flex-column justify-content-end flex-grow-1" style="background: linear-gradient(to top, rgba(0,0,0,0.92), rgba(0,0,0,0.08));">
+                                        <div style="position:relative;min-height:260px;background-color:#111;overflow:hidden;" class="d-flex flex-column">
+                                            <img src="${img}" alt="" aria-hidden="true"
+                                                 onerror="this.style.display='none'"
+                                                 style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;opacity:0.92;">
+                                            <div class="p-3 text-start d-flex flex-column justify-content-end flex-grow-1"
+                                                 style="position:relative;z-index:1;background:linear-gradient(to top,rgba(0,0,0,0.93),rgba(0,0,0,0.06));">
                                                 <h5 class="fw-bold text-white mb-1">${name}</h5>
                                                 <p class="small mb-0 fw-semibold" style="color:#fecaca;">${cardText}</p>
                                             </div>
@@ -2525,13 +2539,13 @@
 
         /* ─── Share My Vibe Handler (html2canvas + Web Share API) ─── */
         function shareMyVibe() {
-            // Try to capture the VIP ticket if it is currently visible
-            const ticketEl = document.querySelector('#capsuleReveal .vip-ticket');
+            // Primary target: the VIP ticket by its explicit id
+            const ticketEl = document.getElementById('vibe-ticket');
             const capsuleReveal = document.getElementById('capsuleReveal');
             const ticketVisible = capsuleReveal && capsuleReveal.style.display !== 'none' && ticketEl;
+            const SWAR_URL = 'https://swar-sync.onrender.com';
 
             if (ticketVisible && typeof html2canvas !== 'undefined') {
-                // Capture the VIP ticket as an image
                 showSwarToast('Capturing your vibe ticket… ✨');
                 html2canvas(ticketEl, {
                     scale: 3,
@@ -2541,33 +2555,30 @@
                     logging: false
                 }).then(function(canvas) {
                     canvas.toBlob(function(blob) {
-                        if (!blob) { shareVibeText(); return; }
+                        if (!blob) { shareVibeText(SWAR_URL); return; }
                         const file = new File([blob], 'My-Swar-Vibe.png', { type: 'image/png' });
-                        const shareUrl = window.location.origin || 'https://swar.onrender.com';
                         const shareData = {
                             title: 'SWAR – Sync Your Vibe 🎵',
-                            text: `Check out my SWAR Vibe! 🎵✨ ${shareUrl}`,
+                            text: `Check out my customized SWAR Vibe! 🎵✨ Create yours at: ${SWAR_URL}`,
                             files: [file]
                         };
-
                         if (navigator.canShare && navigator.canShare({ files: [file] })) {
                             navigator.share(shareData).catch(function(err) {
-                                console.log('Share skipped:', err);
-                                // Fallback: download the image
+                                console.log('Share skipped/cancelled:', err);
                                 downloadVibeImage(canvas);
                             });
                         } else {
-                            // Web Share API doesn't support files → auto-download
+                            // Web Share API doesn't support file sharing → auto-download
                             downloadVibeImage(canvas);
                         }
                     }, 'image/png');
                 }).catch(function(err) {
                     console.error('html2canvas error:', err);
-                    shareVibeText();
+                    shareVibeText(SWAR_URL);
                 });
             } else {
-                // No ticket visible — share as text
-                shareVibeText();
+                // Ticket not visible — share as rich text with URL
+                shareVibeText(SWAR_URL);
             }
         }
 
@@ -2579,16 +2590,10 @@
             showSwarToast('Vibe image saved! 📸');
         }
 
-        function shareVibeText() {
+        function shareVibeText(swarUrl) {
+            const url = swarUrl || 'https://swar-sync.onrender.com';
             const mood = lastCapsuleVibe || 'Happy';
-            let weatherVal = 'timeless sky';
-            const weatherRes = document.getElementById('weatherDescResults') || document.getElementById('weatherDesc');
-            if (weatherRes && weatherRes.innerText) {
-                const text = weatherRes.innerText;
-                weatherVal = text.includes('Sky:') ? text.split('Sky:')[1].split('|')[0].trim() : text.trim();
-            }
-            const shareUrl = window.location.origin || 'https://swar.onrender.com';
-            const shareText = `I'm tuned to the perfect playlist for my ${mood} vibe on SWAR! 🎵✨ Check out my vibe: ${shareUrl}`;
+            const shareText = `Check out my customized SWAR Vibe! 🎵✨ Create yours at: ${url}`;
 
             if (navigator.share) {
                 navigator.share({
@@ -2821,5 +2826,7 @@
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
+    <!-- html2canvas: placed before </body> to avoid render-blocking -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </body>
 </html>
