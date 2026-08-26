@@ -12,6 +12,8 @@ app = Flask(__name__)
 # HARDCODED CLIENT INITIALIZATION AT GLOBAL LEVEL (PERMANENT KEY FIX)
 # Is key ke aage piche koi space ya extra character nahi hona chahiye
 genai.configure(api_key=os.environ.get('GEMINI_API_KEY'))
+from google import genai
+client = genai.Client(api_key=os.environ.get('GEMINI_API_KEY'))
 
 # Recent mood/weather/category results — stops Gemini spam on refresh
 _vibe_cache = {}
