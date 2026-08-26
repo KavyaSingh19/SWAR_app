@@ -63,12 +63,12 @@ def get_live_weather(city_name="Noida"):
     if not city_name or city_name.strip() == "":
         city_name = "Noida"
     try:
-        url = f"https://wttr.in/{city_name}?format=%C|%t"
+        url = f"https://wttr.in/{city_name}?format=%C|%t&m"
         response = requests.get(url, timeout=2)
         if response.status_code == 200 and "|" in response.text:
             parts = response.text.strip().split("|")
             condition = parts[0].strip()
-            temperature = parts[1].replace("°C", "").replace("+", "").strip()
+            temperature = parts[1].replace("°C", "").replace("°F", "").replace("+", "").strip()
             if condition and temperature:
                 return condition, temperature
     except Exception as e:
