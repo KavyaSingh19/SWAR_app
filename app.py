@@ -1385,11 +1385,8 @@ User: {user_message}
     try:
         from google.generativeai import types
         config = types.GenerationConfig(temperature=0.85, top_p=0.9, max_output_tokens=220)
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=prompt,
-            config=config
-        )
+        model = genai.GenerativeModel("gemini-1.5-flash")
+        response = model.generate_content(prompt, generation_config=config)
         reply = (response.text or "").strip()
         if not reply:
             raise ValueError("empty gemini reply")
