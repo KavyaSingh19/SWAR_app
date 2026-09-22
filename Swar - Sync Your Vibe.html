@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<!-- saved from url=(0022)http://127.0.0.1:5000/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swar - Sync Your Vibe</title>
+    <!-- Combined stable standard CSS layout wrapper -->
+    <link href="./Swar - Sync Your Vibe_files/bootstrap.min.css" rel="stylesheet">
+    <link href="./Swar - Sync Your Vibe_files/css2" rel="stylesheet">
+    <style>
+    body {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url('/static/images/bg1.webp') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    transition: background 0.8s ease;
+    min-height: 100vh;
+}
+        .glass-card {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            width: 100% !important; /* Forces layout tracking to stretch perfectly */
+        }
+        .media-card {
+            background: rgba(15, 23, 42, 0.8) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .media-card:hover {
+            transform: translateY(-5px);
+            border-color: #a855f7 !important;
+        }
+        /* MOBILE RESPONSIVE BACKGROUND FIX */
+        @media (max-width: 768px) {
+            body {
+                background-attachment: scroll !important;
+                background-position: center top !important;
+            }
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            .glass-card {
+                padding: 1.5rem !important;
+                margin-bottom: 1.5rem !important;
+            }
+        }
+        .custom-textarea {
+            width: 100%;
+            background-color: #0f172a !important;
+            color: white !important;
+            border: 1px solid #475569 !important;
+            border-radius: 10px;
+            padding: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4 mb-2 text-center d-flex justify-content-center gap-4">
+        <a href="http://127.0.0.1:5000/" class="btn text-white fw-bold px-4 py-2" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 25px; backdrop-filter: blur(10px); text-decoration: none;">
+            🏠 Dashboard
+        </a>
+        <a href="http://127.0.0.1:5000/creator" class="btn text-white fw-bold px-4 py-2" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 25px; backdrop-filter: blur(10px); text-decoration: none;">
+            ✨ Creator's Corner
+        </a>
+    </div>
+
+    <div class="container my-5 text-center" style="max-width: 900px;">
+        <h1 class="fw-bold mb-4">S W A R</h1>
+        
+        <div class="glass-card p-4 mb-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div class="text-start">
+                <h4 class="m-0 fw-semibold">📍 Live Location</h4>
+                <small id="weatherDesc" class="text-muted">Sky: Haze | Feel: 35°C</small>
+            </div>
+            <div class="d-flex gap-2">
+                <input type="text" id="cityInput" class="form-control bg-dark text-white border-secondary" value="Noida" style="width: 160px;">
+                <button class="btn btn-info text-white fw-bold" onclick="fetchVibe(&#39;Suggest music based purely on current weather aesthetics&#39;)">Go</button>
+            </div>
+        </div>
+
+        <h5 class="text-muted mb-3">How is your heart feeling right now?</h5>
+        <div class="d-flex justify-content-center gap-3 mb-4 flex-wrap">
+            <button class="btn btn-outline-light px-4 py-2" style="border-radius: 20px;" onclick="fetchVibe(&#39;Happy&#39;)">😊 Happy</button>
+            <button class="btn btn-outline-light px-4 py-2" style="border-radius: 20px;" onclick="fetchVibe(&#39;Sad&#39;)">😢 Sad</button>
+            <button class="btn btn-outline-light px-4 py-2" style="border-radius: 20px;" onclick="fetchVibe(&#39;Peaceful&#39;)">🌿 Peaceful</button>
+            <button class="btn btn-outline-light px-4 py-2" style="border-radius: 20px;" onclick="fetchVibe(&#39;Sentimental&#39;)">💖 Sentimental</button>
+        </div>
+
+        <div class="glass-card p-4 text-start mb-5">
+            <label for="customVibeInput" class="form-label text-white fw-semibold mb-2">✨ Share your exact feelings or backstory:</label>
+            <textarea class="form-control bg-dark text-white border-secondary mb-3" id="customVibeInput" rows="3" placeholder="Tell Gemini exactly what is going on with your day or backlogs..."></textarea>
+            <div class="d-grid">
+                <button class="btn text-white fw-bold py-2" onclick="analyzeCustomVibe()" style="background: linear-gradient(135deg, #6366f1, #a855f7); border: none; border-radius: 10px;">
+                    🔮 Analyze My Vibe with Gemini AI
+                </button>
+            </div>
+        </div>
+
+        <div id="showcaseSection" style="display: block;">
+            <h3 class="text-start mb-4 text-info fw-semibold">🎵 Weather Special Tracks</h3>
+            <div id="musicRecommendations" class="row mb-5">
+                            <div class="col-md-6 col-12 mb-4">
+                                <div class="media-card card text-white h-100 shadow-lg">
+                                    <div style="background-image: url(&#39;/static/images/ok_jaanu.webp&#39;); background-size: cover; background-position: center; height: 180px; width: 100%;"></div>
+                                    <div class="p-3 text-start">
+                                        <h5 class="fw-semibold text-white mb-2">Enna Sona (Ok Jaanu)</h5>
+                                        <a href="https://open.spotify.com/search/Enna%20Sona%20(Ok%20Jaanu)" target="_blank" class="text-success fw-bold text-decoration-none">▶ Play on Spotify</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 mb-4">
+                                <div class="media-card card text-white h-100 shadow-lg">
+                                    <div style="background-image: url(&#39;/static/images/ok_jaanu.webp&#39;); background-size: cover; background-position: center; height: 180px; width: 100%;"></div>
+                                    <div class="p-3 text-start">
+                                        <h5 class="fw-semibold text-white mb-2">Humma Humma</h5>
+                                        <a href="https://open.spotify.com/search/Humma%20Humma" target="_blank" class="text-success fw-bold text-decoration-none">▶ Play on Spotify</a>
+                                    </div>
+                                </div>
+                            </div></div>
+
+            <h3 class="text-start mb-4 text-warning fw-semibold">🎬 Recommended Escapes</h3>
+            <div id="movieRecommendations" class="row">
+                            <div class="col-md-6 col-12 mb-4">
+                                <div class="media-card card text-white h-100 shadow-lg">
+                                    <div style="background-image: url(&#39;/static/images/ok_jaanu.webp&#39;); background-size: cover; background-position: center; height: 180px; width: 100%;"></div>
+                                    <div class="p-3 text-start">
+                                        <h5 class="fw-semibold text-white mb-2">Ok Jaanu</h5>
+                                        <a href="https://www.google.com/search?q=Ok%20Jaanu+where+to+watch" target="_blank" class="text-warning fw-bold text-decoration-none">🍿 Check OTT Platforms</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 mb-4">
+                                <div class="media-card card text-white h-100 shadow-lg">
+                                    <div style="background-image: url(&#39;/static/images/yjhd.webp&#39;); background-size: cover; background-position: center; height: 180px; width: 100%;"></div>
+                                    <div class="p-3 text-start">
+                                        <h5 class="fw-semibold text-white mb-2">Yeh Jawaani Hai Deewani</h5>
+                                        <a href="https://www.google.com/search?q=Yeh%20Jawaani%20Hai%20Deewani+where+to+watch" target="_blank" class="text-warning fw-bold text-decoration-none">🍿 Check OTT Platforms</a>
+                                    </div>
+                                </div>
+                            </div></div>
+        </div>
+    </div>
+
+    <script>
+        // Global tracking
+        let currentCity = "Noida";
+
+        // AUTOMATIC CORE LOGIC: Site kholte hi weather detect karke recommendations dikhao!
+        window.onload = function() {
+            let cityInput = document.getElementById('cityInput');
+            if(cityInput && cityInput.value.trim() !== "") {
+                currentCity = cityInput.value.trim();
+            }
+            
+            // Default trigger on page load using detected weather/city context
+            // Hum default vibe "Neutral" ya "Weather Context" bhej rahe hain taaki Gemini seedhe weather par focus kare
+            document.getElementById('weatherDesc').innerText = "Analyzing your local weather to curate immediate tracks...";
+            executeCoreCall("Suggest music based purely on current weather aesthetics");
+        };
+
+        function fetchVibe(vibeName) {
+            clearOldRecommendations();
+            document.getElementById('weatherDesc').innerText = `Syncing with weather for ${vibeName} mood...`;
+            
+            // HAPPY MOOD: Halka dark overlay + Happy Image
+            if (vibeName === 'Happy') {
+                document.body.style.background = "linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('/static/images/happy2.jpg') no-repeat center center fixed";
+                document.body.style.backgroundSize = "cover";
+            }
+            
+            // SAD MOOD: Gehra dark overlay + Sad Image
+            if (vibeName === 'Sad') {
+                document.body.style.background = "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url('/static/images/sad2.webp') no-repeat center center fixed";
+                document.body.style.backgroundSize = "cover";
+            }
+            
+            // PEACEFUL MOOD: Medium dark overlay + Peace Image
+            if (vibeName === 'Peaceful') {
+                document.body.style.background = "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)), url('/static/images/peace1.jpg') no-repeat center center fixed";
+                document.body.style.backgroundSize = "cover";
+            }
+            // SENTIMENTAL MOOD: Soft romantic overlay + Sentimental Image
+            if (vibeName === 'Sentimental') {
+                document.body.style.background = "linear-gradient(rgba(0, 0, 0, 0.4), rgba(70, 20, 40, 0.6)), url('/static/images/senti.webp') no-repeat center center fixed";
+                document.body.style.backgroundSize = "cover";
+            }
+            
+            executeCoreCall(vibeName);
+        }
+        
+
+        function analyzeCustomVibe() {
+    let customText = document.getElementById('customVibeInput').value;
+    if(!customText || customText.trim() === "") {
+        alert("Please type something first so Gemini can analyze!");
+        return;
+    }
+    clearOldRecommendations();
+    document.getElementById('weatherDesc').innerText = "🔮 Analysing your mood rhythms...";
+    
+    // Custom box par default wallpaper set karne ke liye
+    document.body.style.background = "linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url('/static/images/bg_main.jpg') no-repeat center center fixed";
+    document.body.style.backgroundSize = "cover";
+    
+    executeCoreCall(customText);
+}
+
+        // Helper function to flush layout cache before new render
+        function clearOldRecommendations() {
+            let musicRow = document.getElementById('musicRecommendations');
+            let moviesRow = document.getElementById('movieRecommendations');
+            if(musicRow) musicRow.innerHTML = '<div class="text-center text-muted my-3">Loading fresh tracks...</div>';
+            if(moviesRow) moviesRow.innerHTML = '<div class="text-center text-muted my-3">Loading fresh escapes...</div>';
+        }
+
+        function executeCoreCall(payload) {
+            let targetCity = document.getElementById('cityInput').value || "Noida";
+            
+            fetch(`/get_vibe?city=${encodeURIComponent(targetCity)}&vibe=${encodeURIComponent(payload)}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('weatherDesc').innerText = `Sky: ${data.weather} | Feel: ${data.temp}°C`;
+                    
+                    let musicRow = document.getElementById('musicRecommendations');
+                    let moviesRow = document.getElementById('movieRecommendations');
+                    
+                    // Final clear right before appending new data
+                    musicRow.innerHTML = "";
+                    moviesRow.innerHTML = "";
+                    
+                    document.getElementById('showcaseSection').style.display = "block";
+                    
+                    // Render Music Cards
+                    data.music.forEach(track => {
+                        let name = track.name ? track.name : track;
+                        let img = track.img || 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400';
+                        let searchUrl = `https://open.spotify.com/search/${encodeURIComponent(name)}`;
+                        
+                        musicRow.innerHTML += `
+                            <div class="col-md-6 col-12 mb-4">
+                                <div class="media-card card text-white h-100 shadow-lg">
+                                    <div style="background-image: url('${img}'); background-size: cover; background-position: center; height: 180px; width: 100%;"></div>
+                                    <div class="p-3 text-start">
+                                        <h5 class="fw-semibold text-white mb-2">${name}</h5>
+                                        <a href="${searchUrl}" target="_blank" class="text-success fw-bold text-decoration-none">▶ Play on Spotify</a>
+                                    </div>
+                                </div>
+                            </div>`;
+                    });
+
+                    // Render Movie Cards
+                    data.movies.forEach(movie => {
+                        let name = movie.name ? movie.name : movie;
+                        let img = movie.img || 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400';
+                        let searchUrl = `https://www.google.com/search?q=${encodeURIComponent(name)}+where+to+watch`;
+                        
+                        moviesRow.innerHTML += `
+                            <div class="col-md-6 col-12 mb-4">
+                                <div class="media-card card text-white h-100 shadow-lg">
+                                    <div style="background-image: url('${img}'); background-size: cover; background-position: center; height: 180px; width: 100%;"></div>
+                                    <div class="p-3 text-start">
+                                        <h5 class="fw-semibold text-white mb-2">${name}</h5>
+                                        <a href="${searchUrl}" target="_blank" class="text-warning fw-bold text-decoration-none">🍿 Check OTT Platforms</a>
+                                    </div>
+                                </div>
+                            </div>`;
+                    });
+                })
+                .catch(err => {
+                    console.error("Error:", err);
+                    document.getElementById('weatherDesc').innerText = "Oops! Connection drop inside Gemini mind.";
+                });
+        }
+    </script>
+
+</body></html>
